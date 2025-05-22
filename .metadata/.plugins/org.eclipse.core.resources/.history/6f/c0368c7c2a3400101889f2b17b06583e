@@ -1,0 +1,94 @@
+package chess;
+
+import java.awt.Color;
+
+// players: 
+//1 = white
+//2 = black
+//
+//pieces (white is positive black is negative)
+//0 = empty
+//1 = pawn
+//2 = rook
+//3 = knight
+//4 = bishop 
+//5 = queen 
+//6 = king
+
+public class Model { 
+
+	int [][] boardContents;
+	int player;
+	boolean checkmate;
+	boolean check;
+	boolean stalemate;
+	View view;
+	Controller controller;
+	
+	
+	public void initialise(View view, Controller controller)
+	{
+		this.view = view;
+		this.controller = controller;
+		boardContents = new int[8][8];
+	}
+
+	
+	public int getBoardContents(int x, int y)
+	{
+		return boardContents[x][y];
+	}
+
+	
+	public void setBoardContents(int x, int y, int value)
+	{
+		boardContents[x][y] = value;
+	}
+
+	
+	public void setPlayer(int player)
+	{
+		this.player = player;
+	}
+
+	
+	public int getPlayer()
+	{
+		return player;
+	}
+
+	
+	public boolean checkmated()
+	{
+		return checkmate;
+	}
+
+
+	public void setCheckMated(boolean finished)
+	{
+		this.checkmate = finished;
+	}
+	
+	public boolean check()
+	{
+		return check;
+	}
+	
+	public void setcheck(boolean check)
+	{
+		this.check = check;
+	}
+	
+	public boolean stalemate()
+	{
+		return stalemate;
+	}
+
+
+	public void setStaleMate(boolean finished)
+	{
+		this.checkmate = finished;
+	}
+
+}
+

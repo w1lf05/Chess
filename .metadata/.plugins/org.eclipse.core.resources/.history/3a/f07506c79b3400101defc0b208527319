@@ -1,0 +1,331 @@
+package chess;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class View {
+
+	JLabel message1 = new JLabel();
+	JLabel message2 = new JLabel();
+	JPanel board1 = new JPanel();
+	JPanel board2 = new JPanel();
+	JFrame frame1 = new JFrame();
+	JFrame frame2 = new JFrame();
+	private Model model;
+	private Controller controller;
+	JPanel p1Panel = new JPanel();
+	JPanel p2Panel = new JPanel();
+	int count = 0;
+	int revcount = 0;
+	BackgroundButton [][] buttons;
+	BackgroundButton [][] buttons2;
+	
+
+	public void initialise(Model model, Controller controller)
+	{
+		
+		//testing icon
+		
+		
+		this.model = model;
+		this.controller = controller;
+		
+		buttons = new BackgroundButton[8][8];
+		for(int i=0;i<8;i++)
+			for(int j = 0;j<8;j++)
+			{
+				buttons[i][j] = new BackgroundButton();
+				buttons[i][j].setwhitebackground();
+				if(i%2==0 && j%2==0)
+				{
+					buttons[i][j].setgreenbackground();
+				}
+				if(i%2==1 && j%2==1)
+				{
+					buttons[i][j].setgreenbackground();
+				}
+			}
+				
+		
+		buttons2 = new BackgroundButton[8][8];
+		for(int i=0;i<8;i++)
+			for(int j = 0;j<8;j++)
+			{
+				buttons2[i][j] = new BackgroundButton();
+				buttons2[i][j].setwhitebackground();
+				if(i%2==0 && j%2==0)
+				{
+					buttons2[i][j].setgreenbackground();
+				}
+				if(i%2==1 && j%2==1)
+				{
+					buttons2[i][j].setgreenbackground();
+				}
+			}
+				
+		
+			
+		
+		
+		
+		
+		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame1.setTitle("Chess!!!!");
+		frame1.setLocationRelativeTo(null); // centre on screen
+		frame1.getContentPane().setLayout(new GridLayout(1, 2));
+		
+		p1Panel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
+		p1Panel.setLayout(new BorderLayout());
+		frame1.add(p1Panel);
+		
+		
+
+		message1.setFont(new Font("Arial", Font.BOLD, 20));
+		message2.setFont(new Font("Arial", Font.BOLD, 20));
+
+
+		// Now we add the 'stuff' for each player to the panel for that player...
+		message1.setText("Player 1 (White)");
+		p1Panel.add(message1, BorderLayout.NORTH);
+	
+		buildboard(board1);
+		board1.setLayout(new GridLayout(8,8));
+		p1Panel.add(board1, BorderLayout.CENTER);
+
+		
+		// Button pressed 
+		for (int y = 0; y <= 8 - 1; y++)
+		{
+			for (int x = 0; x <= 8 - 1; x++)
+			{
+				final Integer innerx = new Integer(x);
+				final Integer innery = new Integer(y);
+				buttons[x][y].addActionListener(new ActionListener()
+				{
+					
+					public void actionPerformed(ActionEvent e)
+					{
+						controller.squareSelected(1,innerx,innery);
+					}
+
+				});
+				buttons2[x][y].addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						controller.squareSelected(2,innerx,innery);
+					}
+				});
+			}
+		}
+		refreshView();
+		
+		
+		JButton restart = new JButton("Restart");
+		restart.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				controller.startup();
+			}
+		});
+		p1Panel.add(restart, BorderLayout.SOUTH);
+
+		// player 2
+		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame2.setTitle("Reversi!!!!");
+		frame2.setLocationRelativeTo(null); // centre on screen
+		frame2.getContentPane().setLayout(new GridLayout(1, 2));
+
+		
+		p2Panel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 3));
+		p2Panel.setLayout(new BorderLayout());
+		frame2.add(p2Panel);
+		
+		message2.setText("Player 2 (Black)");
+		p2Panel.add(message2, BorderLayout.NORTH);
+		
+		
+		
+		
+		buildreverseboard(board2);
+		board2.setLayout(new GridLayout(8,8));
+		p2Panel.add(board2, BorderLayout.CENTER);
+		
+		
+		JButton restart1 = new JButton("Restart");
+		restart1.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				controller.startup();
+			}
+		});
+		
+		p2Panel.add(restart1, BorderLayout.SOUTH);
+		
+		// pack and set visible
+		frame1.pack();
+		frame1.setVisible(true);
+		
+		frame2.pack();
+		frame2.setVisible(true);
+	}
+	
+	
+	
+	public JPanel buildboard(JPanel board) 
+	{
+		int width = 8;
+		int height = 8;
+		
+		for (int y = 0; y <= height - 1; y++)
+		{
+			for (int x = 0; x <= width - 1; x++)
+			{
+				//pieces (white is positive black is negative)
+				//0 = empty
+				//1 = pawn
+				//2 = rook
+				//3 = knight
+				//4 = bishop 
+				//5 = queen 
+				//6 = king
+				buttons[x][y].setcoords(x,y);
+				switch (model.getBoardContents(x, y))
+				{
+				case 1:
+					buttons[x][y].setwhitepawn();
+					break;
+				case 2:
+					buttons[x][y].setwhiterook();
+					break;
+				case 3:
+					buttons[x][y].setwhiteknight();
+					break;
+				case 4:
+					buttons[x][y].setwhitebishop();
+					break;
+				case 5:
+					buttons[x][y].setwhitequeen();
+					break;
+				case 6:
+					buttons[x][y].setwhiteking();
+					break;
+				case -1:
+					buttons[x][y].setblackpawn();
+					break;
+				case -2:
+					buttons[x][y].setblackrook();
+					break;
+				case -3:
+					buttons[x][y].setblackknight();
+					break;
+				case -4:
+					buttons[x][y].setblackbishop();
+					break;
+				case -5:
+					buttons[x][y].setblackqueen();
+					break;
+				case -6:
+					buttons[x][y].setblackking();
+					break;
+				case 100:
+					buttons[x][y].setplayable();
+					break;
+				default:
+					buttons[x][y].setoriginal();
+					break;
+				}
+				
+				
+				
+				board.add(buttons[x][y]);	
+			}
+		}
+		return board;
+	}
+	
+	public JPanel buildreverseboard(JPanel board)
+	{
+		int width = 8;
+		int height = 8;
+		
+		for (int y = height - 1; y >= 0; y--)
+		{
+			for (int x = width - 1; x >= 0; x--)
+			{
+				buttons2[x][y].setcoords(x,y);
+				switch (model.getBoardContents(x, y))
+				{
+				case 1:
+					buttons2[x][y].setwhitepawn();
+					break;
+				case 2:
+					buttons2[x][y].setwhiterook();
+					break;
+				case 3:
+					buttons2[x][y].setwhiteknight();
+					break;
+				case 4:
+					buttons2[x][y].setwhitebishop();
+					break;
+				case 5:
+					buttons2[x][y].setwhitequeen();
+					break;
+				case 6:
+					buttons2[x][y].setwhiteking();
+					break;
+				case -1:
+					buttons2[x][y].setblackpawn();
+					break;
+				case -2:
+					buttons2[x][y].setblackrook();
+					break;
+				case -3:
+					buttons2[x][y].setblackknight();
+					break;
+				case -4:
+					buttons2[x][y].setblackbishop();
+					break;
+				case -5:
+					buttons2[x][y].setblackqueen();
+					break;
+				case -6:
+					buttons2[x][y].setblackking();
+					break;
+				case 100:
+					buttons[x][y].setplayable();
+					break;
+				default:
+					buttons2[x][y].setoriginal();
+					break;
+				} 
+				board.add(buttons2[x][y]);
+			}
+		}
+		return board;
+	}
+
+	 
+	public void refreshView()
+	{
+		board1.removeAll();
+		board2.removeAll();
+		buildboard(board1);
+		buildreverseboard(board2);
+		
+		frame1.repaint();
+		frame2.repaint();
+	}
+}
