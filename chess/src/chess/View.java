@@ -143,7 +143,7 @@ public class View {
 
 		// player 2
 		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame2.setTitle("Reversi!!!!");
+		frame2.setTitle("Chess");
 		frame2.setLocationRelativeTo(null); // centre on screen
 		frame2.getContentPane().setLayout(new GridLayout(1, 2));
 
@@ -168,6 +168,8 @@ public class View {
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				board1.removeAll();
+				board2.removeAll();
 				controller.startup();
 			}
 		});
@@ -205,6 +207,9 @@ public class View {
 				buttons[x][y].setcoords(x,y);
 				switch (model.getBoardContents(x, y))
 				{
+				case 0: 
+					buttons[x][y].setoriginal();
+					break;
 				case 1:
 					buttons[x][y].setwhitepawn();
 					break;
@@ -242,6 +247,42 @@ public class View {
 					buttons[x][y].setblackking();
 					break;
 				case 100:
+					buttons[x][y].setplayable();
+					break;
+				case 101:
+					buttons[x][y].setplayable();
+					break;	
+				case 102:
+					buttons[x][y].setplayable();
+					break;
+				case 103:
+					buttons[x][y].setplayable();
+					break;
+				case 104:
+					buttons[x][y].setplayable();
+					break;
+				case 105:
+					buttons[x][y].setplayable();
+					break;
+				case 106:
+					buttons[x][y].setplayable();
+					break;
+				case 94: //black king
+					buttons[x][y].setplayable();
+					break;	
+				case 95: //black queen
+					buttons[x][y].setplayable();
+					break;
+				case 96: //black bishop
+					buttons[x][y].setplayable();
+					break;
+				case 97: //black knight
+					buttons[x][y].setplayable();
+					break;
+				case 98: //black rook
+					buttons[x][y].setplayable();
+					break;
+				case 99: //black pawn
 					buttons[x][y].setplayable();
 					break;
 				default:
@@ -321,6 +362,19 @@ public class View {
 	 
 	public void refreshView()
 	{
+		if(controller.checkmate() == true)
+		{
+			if(model.getPlayer()==1)
+			{
+				message1.setText("You Lose unlucky");
+				message2.setText("You Win congrats");
+			}
+			else
+			{
+				message2.setText("You Lose unlucky");
+				message1.setText("You Win congrats");
+			}
+		}
 		board1.removeAll();
 		board2.removeAll();
 		buildboard(board1);

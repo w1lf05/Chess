@@ -1,0 +1,8 @@
+
+- to be more organised especially when going to a project over long amount of time with breaks.
+
+- no implementation of checkmate, check and stalemate (just pieces moving about on a board with players turns) - simple but effective 
+
+- easy to copy the method of MVC (model view controller) from the Othello game.
+
+

@@ -1,0 +1,1482 @@
+package chess;
+
+public class Controller {
+
+	Model model;
+	View view;
+	
+	int piecepicked = 0;
+	int pickedx = 0;
+	int pickedy = 0;
+	int piecetaken = 0;
+	int clickedpiece = 0;
+	
+	public void startup() {
+		// TODO Auto-generated method stub
+		
+		// this is set to 2 for testing ok; 
+		model.setPlayer(2);
+		
+	for(int i=0;i<7;i++)
+	{
+		for(int j=0;j<7;j++)
+		{
+			model.setBoardContents(i, j, 0);
+		}
+	}
+		//black pieces
+		model.setBoardContents(0, 0, -2);
+		model.setBoardContents(1, 0, -3);
+		model.setBoardContents(2, 0, -4);
+		model.setBoardContents(3, 0, -5);
+		model.setBoardContents(4, 0, -6);
+		model.setBoardContents(5, 0, -4);
+		model.setBoardContents(6, 0, -3);
+		model.setBoardContents(7, 0, -2);
+		
+		model.setBoardContents(0, 1, -1);
+		model.setBoardContents(1, 1, -1);
+		model.setBoardContents(2, 1, -1);
+		model.setBoardContents(3, 1, -1);
+		model.setBoardContents(4, 1, -1);
+		model.setBoardContents(5, 1, -1);
+		model.setBoardContents(6, 1, -1);
+		model.setBoardContents(7, 1, -1);
+		
+		//white pieces
+		model.setBoardContents(0, 7, 2);
+		model.setBoardContents(1, 7, 3);
+		model.setBoardContents(2, 7, 4);
+		model.setBoardContents(3, 7, 5);
+		model.setBoardContents(4, 7, 6);
+		model.setBoardContents(5, 7, 4);
+		model.setBoardContents(6, 7, 3);
+		model.setBoardContents(7, 7, 2);
+		
+		model.setBoardContents(0, 6, 1);
+		model.setBoardContents(1, 6, 1);
+		model.setBoardContents(2, 6, 1);
+		model.setBoardContents(3, 6, 1);
+		model.setBoardContents(4, 6, 1);
+		model.setBoardContents(5, 6, 1);
+		model.setBoardContents(6, 6, 1);
+		model.setBoardContents(7, 6, 1);
+		
+		view.refreshView();
+	}
+	
+	//testing
+//	public void startup() {
+//		
+//		model.setPlayer(1);
+//		
+//		
+//		for(int i=0;i<7;i++)
+//		{
+//			for(int j=0;j<7;j++)
+//			{
+//				model.setBoardContents(i, j, 0);
+//			}
+//		}
+//		model.setBoardContents(5, 7, 3);
+//		model.setBoardContents(3, 2, -3);
+//		
+//		view.refreshView();
+//	}
+	
+	public void squareSelected(int player, int x, int y) {
+		if(model.checkmate == true)
+		{
+			System.out.println("something gone wrong checkmate");
+			return;
+		}
+		if(model.stalemate == true)
+		{
+			System.out.println("something gone wrong stalemate");
+			return;
+		}
+		// players: 
+		//1 = white
+		//2 = black
+		//
+		//pieces (white is positive black is negative)(add 100 if its a piece going to be taken)
+		//0 = empty
+		//100 = playable space
+		//1 = pawn
+		//2 = rook
+		//3 = knight
+		//4 = bishop 
+		//5 = queen 
+		//6 = king
+		if(model.getPlayer() == 1)
+		{
+//			if(piecepicked ==1 && model.getBoardContents(x, y)>90)
+//			{
+//				removemovable();
+//			}
+			
+			if(model.getPlayer()== 2 )
+			{
+				view.message1.setText("Wrong colour matey");
+			}
+			
+			if(model.getBoardContents(x, y) > 0 && model.getBoardContents(x, y) < 100)
+			{
+				if(model.getBoardContents(x, y) < 90 && clickedpiece == 1)
+				{
+					clickedpiece = 0;
+					removemovable();
+				}
+				
+				view.message1.setText("Correct piece");
+				//I want a function for each piece now for where they can play next 
+				// has to be for the different colours as well
+				if(model.getBoardContents(x, y) == 1)
+				{
+					view.message1.setText("we picked a pawn");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = 1;
+					whitepawnplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == 2)
+				{
+					view.message1.setText("we picked a rook");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = 2;
+					whiterookplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == 3)
+				{
+					view.message1.setText("we picked a knight");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = 3;
+					whiteknightplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == 4)
+				{
+					view.message1.setText("we picked a bishop");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = 4;
+					whitebishopplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == 5)
+				{
+					view.message1.setText("we picked a queen");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = 5;
+					whitequeenplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == 6)
+				{
+					view.message1.setText("we picked a king");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = 6;
+					whitekingplay(x,y);
+					view.refreshView();
+				}
+				
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == 1)
+			{
+				view.message1.setText("moved piece");
+				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				if(y==0)
+				{
+					model.setBoardContents(x, y, 5);
+				}
+				else
+				{
+					model.setBoardContents(x, y, 1);
+				}
+				view.refreshView();
+			}
+			
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == 2)
+			{
+				view.message1.setText("moved piece");
+				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, 2);
+				view.refreshView();
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == 3)
+			{
+				view.message1.setText("moved piece");
+				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, 3);
+				view.refreshView();
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == 4)
+			{
+				view.message1.setText("moved piece");
+				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, 4);
+				view.refreshView();
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == 5)
+			{
+				view.message1.setText("moved piece");
+				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, 5);
+				view.refreshView();
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == 6)
+			{
+				view.message1.setText("moved piece");
+				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, 6);
+				view.refreshView();
+			}
+			
+			
+			
+			//continue here
+			if(model.getBoardContents(x, y) < 0)
+			{
+				view.message1.setText("Wrong colour matey");
+			}
+			if(model.getBoardContents(x, y) == 0)
+			{
+				view.message1.setText("Not even a peice");
+			}
+		}
+		
+		// players: 
+				//1 = white
+				//2 = black
+				//
+				//pieces (white is positive black is negative)(add 100 if its a piece going to be taken)
+				//0 = empty
+				//100 = playable space
+				//1 = pawn
+				//2 = rook
+				//3 = knight
+				//4 = bishop 
+				//5 = queen 
+				//6 = king
+		if(model.getPlayer() == 2)
+		{
+			if(model.getBoardContents(x, y) < 0)
+			{
+				view.message2.setText("Correct piece");
+				//I want a function for each piece now for where they can play next 
+				// has to be for the different colours as well
+				if(model.getBoardContents(x, y) < 90 && clickedpiece == 1)
+				{
+					clickedpiece = 0;
+					removemovable();
+				}
+				
+				view.message1.setText("Correct piece");
+				//I want a function for each piece now for where they can play next 
+				// has to be for the different colours as well
+				if(model.getBoardContents(x, y) == -1)
+				{
+					view.message1.setText("we picked a pawn");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = -1;
+					blackpawnplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == -2)
+				{
+					view.message1.setText("we picked a rook");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = -2;
+					blackrookplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == -3)
+				{
+					view.message1.setText("we picked a knight");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = -3;
+					blackknightplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == -4)
+				{
+					view.message1.setText("we picked a bishop");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = -4;
+					blackbishopplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == -5)
+				{
+					view.message1.setText("we picked a queen");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = -5;
+					blackqueenplay(x,y);
+					view.refreshView();
+				}
+				
+				if(model.getBoardContents(x, y) == -6)
+				{
+					view.message1.setText("we picked a king");
+					clickedpiece = 1;
+					pickedx = x;
+					pickedy = y;
+					piecepicked = -6;
+					blackkingplay(x,y);
+					view.refreshView();
+				}
+				
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == -1)
+			{
+				view.message1.setText("moved piece");
+//				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				if(y==7)
+				{
+					model.setBoardContents(x, y, -5);
+				}
+				else
+				{
+					model.setBoardContents(x, y, -1);
+				}
+				view.refreshView();
+			}
+			
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == -2)
+			{
+				view.message1.setText("moved piece");
+//				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, -2);
+				view.refreshView();
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == -3)
+			{
+				view.message1.setText("moved piece");
+//				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, -3);
+				view.refreshView();
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == -4)
+			{
+				view.message1.setText("moved piece");
+//				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, -4);
+				view.refreshView();
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == -5)
+			{
+				view.message1.setText("moved piece");
+//				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, -5);
+				view.refreshView();
+			}
+			if(model.getBoardContents(x, y) >= 90 && piecepicked == -6)
+			{
+				view.message1.setText("moved piece");
+//				model.setPlayer(2);
+				piecepicked = 0;
+				model.setBoardContents(pickedx, pickedy, 0);
+				removemovable();
+				model.setBoardContents(x, y, -6);
+				view.refreshView();
+			}
+			
+			if(model.getBoardContents(x, y) > 0)
+			{
+				view.message2.setText("Wrong colour matey");
+			}
+			if(model.getBoardContents(x, y) == 0)
+			{
+				view.message2.setText("Not even a peice");
+			}
+		}
+	}
+
+	
+
+	public void initialise(Model model, View view) {
+		// TODO Auto-generated method stub
+		this.model = model;
+		this.view = view;
+	}
+
+	
+	public boolean whitepawnplay(int x, int y)
+	{
+		
+		boolean moved = false;
+		if(y!=6)
+		{
+			moved = true;
+		}
+		if(model.getBoardContents(x, y-1) == 0)
+		{
+			model.setBoardContents(x, y-1, 100);
+		}
+		if(moved == false && model.getBoardContents(x, y-2) == 0 && model.getBoardContents(x, y-1) == 0)
+		{
+			model.setBoardContents(x, y-2, 100);
+		}
+		if(x == 7)
+		{
+			if(model.getBoardContents(x-1, y-1) < 0)
+			{
+				model.setBoardContents(x-1, y-1, (model.getBoardContents(x-1, y-1)+100));
+			}
+			return true;
+		}
+		if(model.getBoardContents(x+1, y-1) < 0)
+		{
+			model.setBoardContents(x+1, y-1, (model.getBoardContents(x+1, y-1)+100));
+		}
+		if(x==0)
+		{
+			return true;
+		}
+		if(model.getBoardContents(x-1, y-1) < 0)
+		{
+			model.setBoardContents(x-1, y-1, (model.getBoardContents(x-1, y-1)+100));
+		}
+		return true;
+	}
+	
+	public boolean blackpawnplay(int x, int y)
+	{
+		
+		boolean moved = false;
+		if(y!=1)
+		{
+			moved = true;
+		}
+		if(model.getBoardContents(x, y+1) == 0)
+		{
+			model.setBoardContents(x, y+1, 100);
+		}
+		if(moved == false && model.getBoardContents(x, y+2) == 0 && model.getBoardContents(x, y+1) == 0)
+		{
+			model.setBoardContents(x, y+2, 100);
+		}
+		if(x == 7)
+		{
+			if(model.getBoardContents(x-1, y+1) > 0)
+			{
+				model.setBoardContents(x-1, y+1, (model.getBoardContents(x-1, y+1)+100));
+			}
+			return true;
+		}
+		if(model.getBoardContents(x+1, y+1) > 0 && model.getBoardContents(x+1, y+1) < 90 )
+		{
+			model.setBoardContents(x+1, y+1, (model.getBoardContents(x+1, y+1)+100));
+		}
+		if(x==0)
+		{
+			return true;
+		}
+		if(model.getBoardContents(x-1, y+1) > 0 && model.getBoardContents(x-1, y+1) < 90)
+		{
+			model.setBoardContents(x-1, y+1, (model.getBoardContents(x-1, y+1)+100));
+		}
+		return true;
+	}
+	
+	public void whiterookplay(int x, int y)
+	{
+		int i = x;
+		while(i!=7)
+		{
+			i++;
+			if(model.getBoardContents(i, y) < 0)
+			{
+				model.setBoardContents(i, y, (model.getBoardContents(i, y)+100));
+			}
+			if(model.getBoardContents(i, y) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i, y, 100);
+			}
+			
+		}
+		int i2 = x;
+		while(i2!=0)
+		{
+			i2--;
+			if(model.getBoardContents(i2, y) < 0)
+			{
+				model.setBoardContents(i2, y, (model.getBoardContents(i2, y)+100));
+			}
+			if(model.getBoardContents(i2, y) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i2, y, 100);
+			}
+			
+		}
+		int j = y;
+		while(j!=7)
+		{
+			j++;
+			if(model.getBoardContents(x, j) < 0)
+			{
+				model.setBoardContents(x, j, (model.getBoardContents(x, j)+100));
+			}
+			if(model.getBoardContents(x, j) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(x, j, 100);
+			}
+			
+		}
+		int j2 = y;
+		while(j2!=0)
+		{
+			j2--;
+			if(model.getBoardContents(x, j2) < 0)
+			{
+				model.setBoardContents(x, j2, (model.getBoardContents(x,j2)+100));
+			}
+			if(model.getBoardContents(x, j2) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(x, j2, 100);
+			}
+			
+		}
+	}
+	
+	
+	public void blackrookplay(int x, int y)
+	{
+		int i = x;
+		while(i!=7)
+		{
+			i++;
+			if(model.getBoardContents(i, y) > 0 && model.getBoardContents(i, y) < 90)
+			{
+				model.setBoardContents(i, y, (model.getBoardContents(i, y)+100));
+			}
+			if(model.getBoardContents(i, y) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i, y, 100);
+			}
+			
+		}
+		int i2 = x;
+		while(i2!=0)
+		{
+			i2--;
+			if(model.getBoardContents(i2, y) > 0 && model.getBoardContents(i2, y) < 90)
+			{
+				model.setBoardContents(i2, y, (model.getBoardContents(i2, y)+100));
+			}
+			if(model.getBoardContents(i2, y) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i2, y, 100);
+			}
+			
+		}
+		int j = y;
+		while(j!=7)
+		{
+			j++;
+			if(model.getBoardContents(x, j) > 0 && model.getBoardContents(x, j) < 90)
+			{
+				model.setBoardContents(x, j, (model.getBoardContents(x, j)+100));
+			}
+			if(model.getBoardContents(x, j) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(x, j, 100);
+			}
+			
+		}
+		int j2 = y;
+		while(j2!=0)
+		{
+			j2--;
+			
+			if(model.getBoardContents(x, j2) > 0 && model.getBoardContents(x, j2) < 90)
+			{
+				model.setBoardContents(x, j2, (model.getBoardContents(x,j2)+100));
+			}
+			if(model.getBoardContents(x, j2) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(x, j2, 100);
+			}
+			
+		}
+	}
+	
+	//needed here to fix the error of out of bounds
+	public void whiteknightplay(int x, int y)
+	{
+		// 8 possible moves 
+		// need to find boundary
+		System.out.println(x);
+		if(x <= 5)
+		{
+			if(y>0)
+			{
+				if(model.getBoardContents(x+2, y-1) <= 0)
+				{
+					model.setBoardContents(x+2, y-1, (model.getBoardContents(x+2, y-1)+100));
+				}
+			}
+			if(y<7)
+			{
+				if(model.getBoardContents(x+2, y+1) <= 0)
+				{
+					model.setBoardContents(x+2, y+1, (model.getBoardContents(x+2, y+1)+100));
+				}
+			}
+			
+		}
+		if(x>=2)
+		{
+			if(y>0)
+			{
+				if(model.getBoardContents(x-2, y-1) <= 0)
+				{
+					model.setBoardContents(x-2, y-1, (model.getBoardContents(x-2, y-1)+100));
+				}
+			}
+			if(y<7)
+			{
+				if(model.getBoardContents(x-2, y+1) <= 0)
+				{
+					model.setBoardContents(x-2, y+1, (model.getBoardContents(x-2, y+1)+100));
+				}
+			}
+			
+		}
+		if(y <= 5)
+		{
+			if(x>0)
+			{
+				if(model.getBoardContents(x-1, y+2) <= 0)
+				{
+					model.setBoardContents(x-1, y+2, (model.getBoardContents(x-1, y+2)+100));
+				}
+			}
+			if(x<7)
+			{
+				if(model.getBoardContents(x+1, y+2) <= 0)
+				{
+					model.setBoardContents(x+1, y+2, (model.getBoardContents(x+1, y+2)+100));
+				}
+			}
+			
+		}
+		if(y >=2)
+		{
+			if(x>0)
+			{
+				if(model.getBoardContents(x-1, y-2) <= 0)
+				{
+					model.setBoardContents(x-1, y-2, (model.getBoardContents(x-1, y-2)+100));
+				}
+			}
+			if(x<7)
+			{
+				if(model.getBoardContents(x+1, y-2) <= 0)
+				{
+					model.setBoardContents(x+1, y-2, (model.getBoardContents(x+1, y-2)+100));
+				}
+			}
+			
+		}
+	}
+	
+	public void blackknightplay(int x, int y)
+	{
+		// 8 possible moves 
+		// need to find boundary
+		System.out.println(x);
+		if(x <= 5)
+		{
+			if(y>0)
+			{
+				if(model.getBoardContents(x+2, y-1) >= 0 && model.getBoardContents(x+2, y-1) < 90)
+				{
+					model.setBoardContents(x+2, y-1, (model.getBoardContents(x+2, y-1)+100));
+				}
+			}
+			if(y<7)
+			{
+				if(model.getBoardContents(x+2, y+1) >= 0 && model.getBoardContents(x+2, y+1) < 90)
+				{
+					model.setBoardContents(x+2, y+1, (model.getBoardContents(x+2, y+1)+100));
+				}
+			}
+			
+		}
+		if(x>=2)
+		{
+			if(y>0)
+			{
+				if(model.getBoardContents(x-2, y-1) >= 0 && model.getBoardContents(x-2, y-1) < 90)
+				{
+					model.setBoardContents(x-2, y-1, (model.getBoardContents(x-2, y-1)+100));
+				}
+			}
+			if(y<7)
+			{
+				if(model.getBoardContents(x-2, y+1) >= 0 && model.getBoardContents(x-2, y+1) < 90)
+				{
+					model.setBoardContents(x-2, y+1, (model.getBoardContents(x-2, y+1)+100));
+				}
+			}
+			
+		}
+		if(y <= 5)
+		{
+			if(x>0)
+			{
+				if(model.getBoardContents(x-1, y+2) >= 0 && model.getBoardContents(x-1, y+2) < 90)
+				{
+					model.setBoardContents(x-1, y+2, (model.getBoardContents(x-1, y+2)+100));
+				}
+			}
+			if(x<7)
+			{
+				if(model.getBoardContents(x+1, y+2) >= 0 && model.getBoardContents(x+1, y+2) < 90)
+				{
+					model.setBoardContents(x+1, y+2, (model.getBoardContents(x+1, y+2)+100));
+				}
+			}
+			
+		}
+		if(y >=2)
+		{
+			if(x>0)
+			{
+				if(model.getBoardContents(x-1, y-2) >= 0 && model.getBoardContents(x-1, y-2) < 90)
+				{
+					model.setBoardContents(x-1, y-2, (model.getBoardContents(x-1, y-2)+100));
+				}
+			}
+			if(x<7)
+			{
+				if(model.getBoardContents(x+1, y-2) >= 0 && model.getBoardContents(x+1, y-2) < 90)
+				{
+					model.setBoardContents(x+1, y-2, (model.getBoardContents(x+1, y-2)+100));
+				}
+			}
+			
+		}
+	}
+	
+	
+	public void whitebishopplay(int x, int y)
+	{
+		//4 directions diagonally
+		int i = x;
+		int j = y;
+		while(i!=7 && j!=7)
+		{
+			i++;
+			j++;
+			if(model.getBoardContents(i, j) < 0)
+			{
+				model.setBoardContents(i, j, (model.getBoardContents(i, j)+100));
+			}
+			if(model.getBoardContents(i, j) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i, j, 100);
+			}
+		}
+		int i2=x;
+		int j2=y;
+		while(i2!=0 && j2!=0)
+		{
+			i2--;
+			j2--;
+			if(model.getBoardContents(i2, j2) < 0)
+			{
+				model.setBoardContents(i2, j2, (model.getBoardContents(i2, j2)+100));
+			}
+			if(model.getBoardContents(i2, j2) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i2, j2, 100);
+			}
+		}
+		
+		int i3=x;
+		int j3=y;
+		while(i3!=7 && j3!=0)
+		{
+			i3++;
+			j3--;
+			if(model.getBoardContents(i3, j3) < 0)
+			{
+				model.setBoardContents(i3, j3, (model.getBoardContents(i3, j3)+100));
+			}
+			if(model.getBoardContents(i3, j3) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i3, j3, 100);
+			}
+		}
+		int i4=x;
+		int j4=y;
+		while(i4!=0 && j4!=7)
+		{
+			i4--;
+			j4++;
+			if(model.getBoardContents(i4, j4) < 0)
+			{
+				model.setBoardContents(i4, j4, (model.getBoardContents(i4, j4)+100));
+			}
+			if(model.getBoardContents(i4, j4) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i4, j4, 100);
+			}
+		}
+	}
+	
+	public void blackbishopplay(int x, int y)
+	{
+		//4 directions diagonally
+		int i = x;
+		int j = y;
+		while(i!=7 && j!=7)
+		{
+			i++;
+			j++;
+			if(model.getBoardContents(i, j) > 0 && model.getBoardContents(i, j) < 90)
+			{
+				model.setBoardContents(i, j, (model.getBoardContents(i, j)+100));
+			}
+			if(model.getBoardContents(i, j) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i, j, 100);
+			}
+		}
+		int i2=x;
+		int j2=y;
+		while(i2!=0 && j2!=0)
+		{
+			i2--;
+			j2--;
+			if(model.getBoardContents(i2, j2) > 0 && model.getBoardContents(i2, j2) < 90)
+			{
+				model.setBoardContents(i2, j2, (model.getBoardContents(i2, j2)+100));
+			}
+			if(model.getBoardContents(i2, j2) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i2, j2, 100);
+			}
+		}
+		
+		int i3=x;
+		int j3=y;
+		while(i3!=7 && j3!=0)
+		{
+			i3++;
+			j3--;
+			if(model.getBoardContents(i3, j3) > 0 && model.getBoardContents(i3, j3) < 90)
+			{
+				model.setBoardContents(i3, j3, (model.getBoardContents(i3, j3)+100));
+			}
+			if(model.getBoardContents(i3, j3) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i3, j3, 100);
+			}
+		}
+		int i4=x;
+		int j4=y;
+		while(i4!=0 && j4!=7)
+		{
+			i4--;
+			j4++;
+			if(model.getBoardContents(i4, j4) > 0 && model.getBoardContents(i4, j4) < 90)
+			{
+				model.setBoardContents(i4, j4, (model.getBoardContents(i4, j4)+100));
+			}
+			if(model.getBoardContents(i4, j4) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i4, j4, 100);
+			}
+		}
+	}
+	
+	public void blackqueenplay(int x, int y)
+	{
+		//bishop 
+		//4 directions diagonally
+				int i = x;
+				int j = y;
+				while(i!=7 && j!=7)
+				{
+					i++;
+					j++;
+					if(model.getBoardContents(i, j) > 0 && model.getBoardContents(i, j) < 90)
+					{
+						model.setBoardContents(i, j, (model.getBoardContents(i, j)+100));
+					}
+					if(model.getBoardContents(i, j) != 0)
+					{
+						break;
+					}
+					else
+					{
+						model.setBoardContents(i, j, 100);
+					}
+				}
+				int i2=x;
+				int j2=y;
+				while(i2!=0 && j2!=0)
+				{
+					i2--;
+					j2--;
+					if(model.getBoardContents(i2, j2) > 0 && model.getBoardContents(i2, j2) < 90)
+					{
+						model.setBoardContents(i2, j2, (model.getBoardContents(i2, j2)+100));
+					}
+					if(model.getBoardContents(i2, j2) != 0)
+					{
+						break;
+					}
+					else
+					{
+						model.setBoardContents(i2, j2, 100);
+					}
+				}
+				
+				int i3=x;
+				int j3=y;
+				while(i3!=7 && j3!=0)
+				{
+					i3++;
+					j3--;
+					if(model.getBoardContents(i3, j3) > 0 && model.getBoardContents(i3, j3) < 90)
+					{
+						model.setBoardContents(i3, j3, (model.getBoardContents(i3, j3)+100));
+					}
+					if(model.getBoardContents(i3, j3) != 0)
+					{
+						break;
+					}
+					else
+					{
+						model.setBoardContents(i3, j3, 100);
+					}
+				}
+				int i4=x;
+				int j4=y;
+				while(i4!=0 && j4!=7)
+				{
+					i4--;
+					j4++;
+					if(model.getBoardContents(i4, j4) > 0 && model.getBoardContents(i4, j4) < 90)
+					{
+						model.setBoardContents(i4, j4, (model.getBoardContents(i4, j4)+100));
+					}
+					if(model.getBoardContents(i4, j4) != 0)
+					{
+						break;
+					}
+					else
+					{
+						model.setBoardContents(i4, j4, 100);
+					}
+				}
+				
+				// rook 
+				int q = x;
+				while(q!=7)
+				{
+					q++;
+					if(model.getBoardContents(q, y) > 0 && model.getBoardContents(q, y) < 90)
+					{
+						model.setBoardContents(q, y, (model.getBoardContents(q, y)+100));
+					}
+					if(model.getBoardContents(q, y) != 0)
+					{
+						break;
+					}
+					else
+					{
+						model.setBoardContents(q, y, 100);
+					}
+					
+				}
+				int q2 = x;
+				while(q2!=0)
+				{
+					q2--;
+					if(model.getBoardContents(q2, y) > 0 && model.getBoardContents(q2, y) < 90)
+					{
+						model.setBoardContents(q2, y, (model.getBoardContents(q2, y)+100));
+					}
+					if(model.getBoardContents(q2, y) != 0)
+					{
+						break;
+					}
+					else
+					{
+						model.setBoardContents(q2, y, 100);
+					}
+					
+				}
+				int w = y;
+				while(w!=7)
+				{
+					w++;
+					if(model.getBoardContents(x, w) > 0 && model.getBoardContents(x, w) < 90)
+					{
+						model.setBoardContents(x, w, (model.getBoardContents(x, w)+100));
+					}
+					if(model.getBoardContents(x, w) != 0)
+					{
+						break;
+					}
+					else
+					{
+						model.setBoardContents(x, w, 100);
+					}
+					
+				}
+				int w2 = y;
+				while(w2!=0)
+				{
+					w2--;
+					
+					if(model.getBoardContents(x, w2) > 0 && model.getBoardContents(x, w2) < 90)
+					{
+						model.setBoardContents(x, w2, (model.getBoardContents(x,w2)+100));
+					}
+					if(model.getBoardContents(x, w2) != 0)
+					{
+						break;
+					}
+					else
+					{
+						model.setBoardContents(x, w2, 100);
+					}
+					
+				}
+	}
+	
+	public void whitequeenplay(int x, int y)
+	{
+		//bishop and rook together
+		
+		//bishop
+		int i = x;
+		int j = y;
+		while(i!=7 && j!=7)
+		{
+			i++;
+			j++;
+			if(model.getBoardContents(i, j) < 0)
+			{
+				model.setBoardContents(i, j, (model.getBoardContents(i, j)+100));
+			}
+			if(model.getBoardContents(i, j) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i, j, 100);
+			}
+		}
+		int i2=x;
+		int j2=y;
+		while(i2!=0 && j2!=0)
+		{
+			i2--;
+			j2--;
+			if(model.getBoardContents(i2, j2) < 0)
+			{
+				model.setBoardContents(i2, j2, (model.getBoardContents(i2, j2)+100));
+			}
+			if(model.getBoardContents(i2, j2) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i2, j2, 100);
+			}
+		}
+		
+		int i3=x;
+		int j3=y;
+		while(i3!=7 && j3!=0)
+		{
+			i3++;
+			j3--;
+			if(model.getBoardContents(i3, j3) < 0)
+			{
+				model.setBoardContents(i3, j3, (model.getBoardContents(i3, j3)+100));
+			}
+			if(model.getBoardContents(i3, j3) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i3, j3, 100);
+			}
+		}
+		int i4=x;
+		int j4=y;
+		while(i4!=0 && j4!=7)
+		{
+			i4--;
+			j4++;
+			if(model.getBoardContents(i4, j4) < 0)
+			{
+				model.setBoardContents(i4, j4, (model.getBoardContents(i4, j4)+100));
+			}
+			if(model.getBoardContents(i4, j4) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(i4, j4, 100);
+			}
+		}
+		
+		//rook
+		int q = x;
+		while(q!=7)
+		{
+			q++;
+			if(model.getBoardContents(q, y) < 0)
+			{
+				model.setBoardContents(q, y, (model.getBoardContents(q, y)+100));
+			}
+			if(model.getBoardContents(q, y) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(q, y, 100);
+			}
+			
+		}
+		int q2 = x;
+		while(q2!=0)
+		{
+			q2--;
+			if(model.getBoardContents(q2, y) < 0)
+			{
+				model.setBoardContents(q2, y, (model.getBoardContents(q2, y)+100));
+			}
+			if(model.getBoardContents(q2, y) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(q2, y, 100);
+			}
+			
+		}
+		int w = y;
+		while(w!=7)
+		{
+			w++;
+			if(model.getBoardContents(x, w) < 0)
+			{
+				model.setBoardContents(x, w, (model.getBoardContents(x, w)+100));
+			}
+			if(model.getBoardContents(x, w) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(x, w, 100);
+			}
+			
+		}
+		int w2 = y;
+		while(w2!=0)
+		{
+			w2--;
+			if(model.getBoardContents(x, w2) < 0)
+			{
+				model.setBoardContents(x, w2, (model.getBoardContents(x,w2)+100));
+			}
+			if(model.getBoardContents(x, w2) != 0)
+			{
+				break;
+			}
+			else
+			{
+				model.setBoardContents(x, w2, 100);
+			}
+			
+		}
+	}
+	
+	public void whitekingplay(int x, int y)
+	{
+		//any direction 1 place
+		if(x!=7)
+		{
+			if(model.getBoardContents(x+1, y) <= 0)
+			{
+				model.setBoardContents(x+1, y, (model.getBoardContents(x+1,y)+100));
+			}
+		}
+		if(x!=0)
+		{
+			if(model.getBoardContents(x-1, y) <= 0)
+			{
+				model.setBoardContents(x-1, y, (model.getBoardContents(x-1,y)+100));
+			}
+		}
+		if(y!=7)
+		{
+			if(model.getBoardContents(x, y+1) <= 0)
+			{
+				model.setBoardContents(x, y+1, (model.getBoardContents(x,y+1)+100));
+			}
+		}
+		if(y!=0)
+		{
+			if(model.getBoardContents(x, y-1) <= 0)
+			{
+				model.setBoardContents(x, y-1, (model.getBoardContents(x,y-1)+100));
+			}
+		}
+		
+		// diagonal
+		if(x!= 7 && y!=7)
+		{
+			if(model.getBoardContents(x+1, y+1) <= 0)
+			{
+				model.setBoardContents(x+1, y+1, (model.getBoardContents(x+1,y+1)+100));
+			}
+		}
+		if(x!=7 && y!=0)
+		{
+			if(model.getBoardContents(x+1, y-1) <= 0)
+			{
+				model.setBoardContents(x+1, y-1, (model.getBoardContents(x+1,y-1)+100));
+			}
+		}
+		if(x!= 0 && y!=7)
+		{
+			if(model.getBoardContents(x-1, y+1) <= 0)
+			{
+				model.setBoardContents(x-1, y+1, (model.getBoardContents(x-1,y+1)+100));
+			}
+		}
+		if(x!=0 && y!=0)
+		{
+			if(model.getBoardContents(x-1, y-1) <= 0)
+			{
+				model.setBoardContents(x-1, y-1, (model.getBoardContents(x-1,y-1)+100));
+			}
+		}
+		
+	}
+	
+	public void blackkingplay(int x, int y)
+	{
+		//any direction 1 place
+		if(x!=7)
+		{
+			if(model.getBoardContents(x+1, y) >= 0 && model.getBoardContents(x+1, y) < 90)
+			{
+				model.setBoardContents(x+1, y, (model.getBoardContents(x+1,y)+100));
+			}
+		}
+		if(x!=0)
+		{
+			if(model.getBoardContents(x-1, y) >= 0 && model.getBoardContents(x-1, y) < 90)
+			{
+				model.setBoardContents(x-1, y, (model.getBoardContents(x-1,y)+100));
+			}
+		}
+		if(y!=7)
+		{
+			if(model.getBoardContents(x, y+1) >= 0 && model.getBoardContents(x, y+1) < 90)
+			{
+				model.setBoardContents(x, y+1, (model.getBoardContents(x,y+1)+100));
+			}
+		}
+		if(y!=0)
+		{
+			if(model.getBoardContents(x, y-1) >= 0 && model.getBoardContents(x, y-1) < 90)
+			{
+				model.setBoardContents(x, y-1, (model.getBoardContents(x,y-1)+100));
+			}
+		}
+		
+		// diagonal
+		if(x!= 7 && y!=7)
+		{
+			if(model.getBoardContents(x+1, y+1) >= 0 && model.getBoardContents(x+1, y+1) < 90)
+			{
+				model.setBoardContents(x+1, y+1, (model.getBoardContents(x+1,y+1)+100));
+			}
+		}
+		if(x!=7 && y!=0)
+		{
+			if(model.getBoardContents(x+1, y-1) >= 0 && model.getBoardContents(x+1, y-1) < 90)
+			{
+				model.setBoardContents(x+1, y-1, (model.getBoardContents(x+1,y-1)+100));
+			}
+		}
+		if(x!= 0 && y!=7)
+		{
+			if(model.getBoardContents(x-1, y+1) >= 0 && model.getBoardContents(x-1, y+1) < 90)
+			{
+				model.setBoardContents(x-1, y+1, (model.getBoardContents(x-1,y+1)+100));
+			}
+		}
+		if(x!=0 && y!=0)
+		{
+			if(model.getBoardContents(x-1, y-1) <= 0 && model.getBoardContents(x-1, y-1) < 90)
+			{
+				model.setBoardContents(x-1, y-1, (model.getBoardContents(x-1,y-1)+100));
+			}
+		}
+		
+	}
+	
+	public void removemovable()
+	{
+		//for removemovable 2 need to be less than negative 100 (might not need to)
+		for(int i=0;i<8;i++) 
+		{
+			for(int j=0;j<8;j++)
+			{
+				if(model.getBoardContents(i, j)>= 90)
+				{
+					model.setBoardContents(i, j, model.getBoardContents(i, j)-100);
+				}
+			}
+		}
+	}
+}

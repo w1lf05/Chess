@@ -26,7 +26,8 @@ public class BackgroundButton extends JButton{
 	
 	public void setplayable() 
 	{
-		this.add(whitecircle);
+		//this.add(whitecircle);
+		this.setText("can move");
 	}
 	
 	public void setgreenbackground()
@@ -69,6 +70,7 @@ public class BackgroundButton extends JButton{
 			this.removeAll();
 			this.setBackground(Color.white);
 		}
+		this.setText("");
 		
 		
 	}
